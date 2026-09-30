@@ -1,0 +1,104 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile information for faculty, teachers, or administrators.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 256 },
+        "displayName": { "type": "string", "maxLength": 128 },
+        "role": { "type": "string", "enum": ["teacher", "admin", "faculty", "staff"], "maxLength": 32 },
+        "institutionName": { "type": "string", "maxLength": 256 },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["uid", "email", "displayName"]
+    },
+    "ClassSession": {
+      "title": "ClassSession",
+      "description": "A scheduled or recurring class session for attendance tracking.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "courseCode": { "type": "string", "maxLength": 64 },
+        "courseName": { "type": "string", "maxLength": 256 },
+        "department": { "type": "string", "maxLength": 128 },
+        "collegeName": { "type": "string", "maxLength": 256 },
+        "instructor": { "type": "string", "maxLength": 128 },
+        "instructorEmail": { "type": "string", "maxLength": 256 },
+        "room": { "type": "string", "maxLength": 64 },
+        "dayOfWeek": { "type": "string", "maxLength": 32 },
+        "status": { "type": "string", "enum": ["upcoming", "in-progress", "completed", "not-marked"], "maxLength": 32 },
+        "year": { "type": "number" },
+        "section": { "type": "string", "maxLength": 32 },
+        "totalEnrolled": { "type": "number" },
+        "presentCount": { "type": "number" },
+        "absentCount": { "type": "number" },
+        "excusedCount": { "type": "number" },
+        "userId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "courseCode", "courseName", "department", "userId"]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "Student record in a class or roster.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 128 },
+        "rollNo": { "type": "string", "maxLength": 64 },
+        "department": { "type": "string", "maxLength": 128 },
+        "year": { "type": "number" },
+        "overallAttendance": { "type": "number" },
+        "classesTotal": { "type": "number" },
+        "classesAttended": { "type": "number" },
+        "classesAbsent": { "type": "number" },
+        "email": { "type": "string", "maxLength": 256 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "name", "rollNo", "department", "userId"]
+    },
+    "AttendanceRecord": {
+      "title": "AttendanceRecord",
+      "description": "Attendance history log entry for a conducted class session.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "sessionId": { "type": "string", "maxLength": 128 },
+        "courseCode": { "type": "string", "maxLength": 64 },
+        "courseName": { "type": "string", "maxLength": 256 },
+        "branch": { "type": "string", "maxLength": 128 },
+        "date": { "type": "string", "maxLength": 32 },
+        "totalStudents": { "type": "number" },
+        "presentCount": { "type": "number" },
+        "absentCount": { "type": "number" },
+        "attendancePercentage": { "type": "number" },
+        "userId": { "type": "string", "maxLength": 128 },
+        "timestamp": { "type": "string", "maxLength": 64 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "sessionId", "courseCode", "date", "userId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User profile containing authentication and account metadata."
+    },
+    "/users/{userId}/sessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/ClassSession" },
+      "description": "Teacher or admin class sessions for daily attendance."
+    },
+    "/users/{userId}/students/{studentId}": {
+      "schema": { "$ref": "#/entities/Student" },
+      "description": "Enrolled student records managed by the user."
+    },
+    "/users/{userId}/attendance_records/{recordId}": {
+      "schema": { "$ref": "#/entities/AttendanceRecord" },
+      "description": "Conducted attendance history submissions."
+    }
+  }
+}

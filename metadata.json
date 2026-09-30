@@ -1,0 +1,6 @@
+{
+  "name": "SAMS Admin - Attendance Management & Academic Portal",
+  "description": "Comprehensive student attendance management system with compliance tracking, threshold analysis, department analytics, quick marking, and student rosters.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
